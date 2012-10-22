@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const OGAtomicSerializedArrayDeserializationException;
+extern NSString *const OGAtomicSerializedArraySerializationException;
+
 @interface OGAtomicSerializedArray : NSObject <NSFastEnumeration>
 
 /**

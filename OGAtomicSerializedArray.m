@@ -8,6 +8,10 @@
 
 #import "OGAtomicSerializedArray.h"
 
+NSString *const OGAtomicSerializedArrayDeserializationException = @"OGAtomicSerializedArrayDeserializationException";
+NSString *const OGAtomicSerializedArraySerializationException = @"OGAtomicSerializedArraySerializationException";
+
+
 @implementation OGAtomicSerializedArray {
     __strong NSString *_path;
     __strong NSMutableArray *_mutableArray;
@@ -143,7 +147,7 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
         [_mutableArray removeAllObjects];
         NSArray *tmp = [NSMutableArray arrayWithContentsOfFile:_path];
         if (nil == tmp) {
-            @throw [NSException exceptionWithName:@"OGAtomicSerializedArrayDeserializationException" reason:[NSString stringWithFormat:@"Couldn't read the OGAtomicSerializedArray at %@", _path] userInfo:nil];
+            @throw [NSException exceptionWithName:OGAtomicSerializedArrayDeserializationException reason:[NSString stringWithFormat:@"Couldn't read the OGAtomicSerializedArray at %@", _path] userInfo:nil];
         }
         [_mutableArray addObjectsFromArray:tmp];
     }
@@ -151,7 +155,7 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
 
 - (void)serialize {
     if(NO == [_mutableArray writeToFile:_path atomically:YES]) {
-        @throw [NSException exceptionWithName:@"OGAtomicSerializedArraySerializationException" reason:[NSString stringWithFormat:@"Couldn't write the OGAtomicSerializedArray at %@", _path] userInfo:nil];
+        @throw [NSException exceptionWithName:OGAtomicSerializedArraySerializationException reason:[NSString stringWithFormat:@"Couldn't write the OGAtomicSerializedArray at %@", _path] userInfo:nil];
     }    
 }
 
