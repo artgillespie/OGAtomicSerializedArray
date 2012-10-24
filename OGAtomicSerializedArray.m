@@ -13,8 +13,8 @@ NSString *const OGAtomicSerializedArraySerializationException = @"OGAtomicSerial
 
 
 @implementation OGAtomicSerializedArray {
-    __strong NSString *_path;
-    __strong NSMutableArray *_mutableArray;
+    NSString * __strong  _path;
+    NSMutableArray * __strong _mutableArray;
 }
 
 static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
