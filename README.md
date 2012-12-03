@@ -14,6 +14,13 @@ associated information from the array. If your app quits unexpectedly, any
 unfinished uploads' information will be loaded into the array the next time
 your app launches and you can restart the uploads.
 
+## Installation
+
+Simply add `OGAtomicSerializedArray.m/h` to your project. If you want to run
+the tests in OGAtomicSerializedArrayTests, you'll need the
+[GHUnit](https://github.com/gabriel/gh-unit) [Cocoapod](http://cocoapods.org).
+*You only need cocoapods to run the test.*
+
 ## Usage
 
 ```objc
