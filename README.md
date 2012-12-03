@@ -19,7 +19,8 @@ your app launches and you can restart the uploads.
 Simply add `OGAtomicSerializedArray.m/h` to your project. If you want to run
 the tests in OGAtomicSerializedArrayTests, you'll need the
 [GHUnit](https://github.com/gabriel/gh-unit) [Cocoapod](http://cocoapods.org).
-*You only need cocoapods to run the test.*
+*You only need cocoapods to run the tests, not to use `OGAtomicSerializedArray`
+in your project*
 
 ## Usage
 
