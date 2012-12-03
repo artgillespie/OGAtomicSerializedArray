@@ -8,6 +8,10 @@
 
 #import "OGAtomicSerializedArray.h"
 
+NSString *const OGAtomicSerializedArrayDeserializationException = @"OGAtomicSerializedArrayDeserializationException";
+NSString *const OGAtomicSerializedArraySerializationException = @"OGAtomicSerializedArraySerializationException";
+
+
 @implementation OGAtomicSerializedArray {
     NSString *_path;
     NSMutableArray *_mutableArray;
@@ -15,23 +19,27 @@
 
 static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
 
-+ (OGAtomicSerializedArray *)atomicSerializedArrayWithPath:(NSString *)path {
++ (NSMutableDictionary *)__globalDictionary {
     if (nil == OGGlobalSerializedArraysDictionary) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             OGGlobalSerializedArraysDictionary = [NSMutableDictionary dictionaryWithCapacity:2];
         });
     }
+    return OGGlobalSerializedArraysDictionary;
+}
+
++ (OGAtomicSerializedArray *)atomicSerializedArrayWithPath:(NSString *)path {
     // on the off chance that more than one thread calls this with the same path
     // at the same time, serialize access to `OGAtomicSerializedArraysDictionary`
 #ifndef __clang_analyzer__
     // The static analyzer doesn't understand that we'll never get here
-    // with a nill value for `OGGlobalSerializedArraysDictionary` and so flags
+    // with a nil value for `OGGlobalSerializedArraysDictionary` and so flags
     // this code as `Nil value used as mutex for @synchronized`
     //
     // #ifdef'ing the synchronization out for analyzer runs eliminates the warning.
     // see http://clang-analyzer.llvm.org/faq.html#exclude_code
-    @synchronized (OGGlobalSerializedArraysDictionary) {
+    @synchronized ([OGAtomicSerializedArray __globalDictionary]) {
 #endif
         // we only keep one in-memory representation for each path, so if
         // we already have one in the global dictionary, return that.
@@ -41,7 +49,7 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
         }
         // the atomic array for this path isn't in memory ...
         atomicArray = [[OGAtomicSerializedArray alloc] initWithPath:path];
-        [OGGlobalSerializedArraysDictionary setObject:atomicArray forKey:path];
+        [[OGAtomicSerializedArray __globalDictionary] setObject:atomicArray forKey:path];
         return atomicArray;
 #ifndef __clang_analyzer__
     } // end @synchronized
@@ -49,11 +57,11 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
 }
 
 + (BOOL)purgeAtomicSerializedArrayAtPath:(NSString *)path purgeFromDisk:(BOOL)purgeFromDisk {
-    OGAtomicSerializedArray *array = [OGGlobalSerializedArraysDictionary objectForKey:path];
+    OGAtomicSerializedArray *array = [[OGAtomicSerializedArray __globalDictionary] objectForKey:path];
     if (nil == array) {
         return NO;
     }
-    [OGGlobalSerializedArraysDictionary removeObjectForKey:path];
+    [[OGAtomicSerializedArray __globalDictionary] removeObjectForKey:path];
     if (NO == purgeFromDisk) {
         return YES;
     }
@@ -62,6 +70,9 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
 }
 
 - (id)initWithPath:(NSString *)path {
+    self = [[OGAtomicSerializedArray __globalDictionary] objectForKey:path];
+    if (nil != self)
+        return self;
     self = [super init];
     if (nil != self) {
         _path = path;
@@ -143,7 +154,7 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
         [_mutableArray removeAllObjects];
         NSArray *tmp = [NSMutableArray arrayWithContentsOfFile:_path];
         if (nil == tmp) {
-            @throw [NSException exceptionWithName:@"OGAtomicSerializedArrayDeserializationException" reason:[NSString stringWithFormat:@"Couldn't read the OGAtomicSerializedArray at %@", _path] userInfo:nil];
+            @throw [NSException exceptionWithName:OGAtomicSerializedArrayDeserializationException reason:[NSString stringWithFormat:@"Couldn't read the OGAtomicSerializedArray at %@", _path] userInfo:nil];
         }
         [_mutableArray addObjectsFromArray:tmp];
     }
@@ -151,7 +162,7 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
 
 - (void)serialize {
     if(NO == [_mutableArray writeToFile:_path atomically:YES]) {
-        @throw [NSException exceptionWithName:@"OGAtomicSerializedArraySerializationException" reason:[NSString stringWithFormat:@"Couldn't write the OGAtomicSerializedArray at %@", _path] userInfo:nil];
+        @throw [NSException exceptionWithName:OGAtomicSerializedArraySerializationException reason:[NSString stringWithFormat:@"Couldn't write the OGAtomicSerializedArray at %@", _path] userInfo:nil];
     }    
 }
 
