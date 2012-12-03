@@ -71,9 +71,9 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
 }
 
 - (id)initWithPath:(NSString *)path {
-    self = [[OGAtomicSerializedArray __globalDictionary] objectForKey:path];
-    if (nil != self)
-        return self;
+    id cached = [[OGAtomicSerializedArray __globalDictionary] objectForKey:path];
+    if (nil != cached)
+        return cached;
     self = [super init];
     if (nil != self) {
         _serializedAccessQueue = dispatch_queue_create("com.origami.OGAtomicSerializedArray.AccessQueue", DISPATCH_QUEUE_SERIAL);
