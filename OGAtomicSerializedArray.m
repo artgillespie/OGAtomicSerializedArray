@@ -9,8 +9,8 @@
 #import "OGAtomicSerializedArray.h"
 
 @implementation OGAtomicSerializedArray {
-    __strong NSString *_path;
-    __strong NSMutableArray *_mutableArray;
+    NSString *_path;
+    NSMutableArray *_mutableArray;
 }
 
 static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
