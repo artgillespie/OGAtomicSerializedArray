@@ -15,6 +15,7 @@ NSString *const OGAtomicSerializedArraySerializationException = @"OGAtomicSerial
 @implementation OGAtomicSerializedArray {
     NSString *_path;
     NSMutableArray *_mutableArray;
+    dispatch_queue_t _serializedAccessQueue;
 }
 
 static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
@@ -75,6 +76,7 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
         return self;
     self = [super init];
     if (nil != self) {
+        _serializedAccessQueue = dispatch_queue_create("com.origami.OGAtomicSerializedArray.AccessQueue", DISPATCH_QUEUE_SERIAL);
         _path = path;
         _mutableArray = [NSMutableArray arrayWithCapacity:2];
         if ([[NSFileManager defaultManager] fileExistsAtPath:_path]) {
@@ -104,38 +106,38 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
 }
 
 - (void)addObjectAndSerialize:(id)object {
-    @synchronized(self) {
+    dispatch_sync(_serializedAccessQueue, ^{
         [_mutableArray addObject:object];
         [self serialize];
-    }
+    });
 }
 
 - (void)addObjectsFromArrayAndSerialize:(NSArray *)array {
-    @synchronized(self) {
+    dispatch_sync(_serializedAccessQueue, ^{
         [_mutableArray addObjectsFromArray:array];
         [self serialize];
-    }
+    });
 }
 
 - (void)removeObjectAtIndexAndSerialize:(NSUInteger)index {
-    @synchronized(self) {
+    dispatch_sync(_serializedAccessQueue, ^{
         [_mutableArray removeObjectAtIndex:index];
         [self serialize];
-    }
+    });
 }
 
 - (void)removeObjectAndSerialize:(id)obj {
-    @synchronized(self) {
+    dispatch_sync(_serializedAccessQueue, ^{
         [_mutableArray removeObject:obj];
         [self serialize];
-    }
+    });
 }
 
 - (void)removeAllObjectsAndSerialize {
-    @synchronized(self) {
+    dispatch_sync(_serializedAccessQueue, ^{
         [_mutableArray removeAllObjects];
         [self serialize];
-    }
+    });
 }
 
 #pragma mark - NSFastEnumeration
@@ -150,14 +152,14 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
  * Private: Overwrite our contents with the array serialized at `_path`
  */
 - (void)updateFromPath {
-    @synchronized(self) {
+    dispatch_sync(_serializedAccessQueue, ^{
         [_mutableArray removeAllObjects];
         NSArray *tmp = [NSMutableArray arrayWithContentsOfFile:_path];
         if (nil == tmp) {
             @throw [NSException exceptionWithName:OGAtomicSerializedArrayDeserializationException reason:[NSString stringWithFormat:@"Couldn't read the OGAtomicSerializedArray at %@", _path] userInfo:nil];
         }
         [_mutableArray addObjectsFromArray:tmp];
-    }
+    });
 }
 
 - (void)serialize {
