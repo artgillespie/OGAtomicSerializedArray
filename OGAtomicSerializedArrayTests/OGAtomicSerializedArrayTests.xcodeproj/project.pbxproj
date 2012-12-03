@@ -16,6 +16,9 @@
 		C80B682E166D1D320004B8B6 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C80B682D166D1D320004B8B6 /* Default@2x.png */; };
 		C80B6830166D1D320004B8B6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C80B682F166D1D320004B8B6 /* Default-568h@2x.png */; };
 		C80B6836166D1DC40004B8B6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C80B6835166D1DC40004B8B6 /* libPods.a */; };
+		C80B6839166D1E850004B8B6 /* OGAtomicSerializedArrayTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C80B6838166D1E850004B8B6 /* OGAtomicSerializedArrayTests.m */; };
+		C8810170166D207900888B97 /* Pods.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C881016F166D207900888B97 /* Pods.xcconfig */; };
+		C8810174166D20CC00888B97 /* OGAtomicSerializedArray.m in Sources */ = {isa = PBXBuildFile; fileRef = C8810173166D20CC00888B97 /* OGAtomicSerializedArray.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +30,12 @@
 		C80B682B166D1D320004B8B6 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		C80B682D166D1D320004B8B6 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		C80B682F166D1D320004B8B6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		C80B6835166D1DC40004B8B6 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libPods.a; path = "../../../../build/Release-iphoneos/libPods.a"; sourceTree = "<group>"; };
+		C80B6835166D1DC40004B8B6 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "../../../../build/Release-iphoneos/libPods.a"; sourceTree = "<group>"; };
+		C80B6837166D1E850004B8B6 /* OGAtomicSerializedArrayTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGAtomicSerializedArrayTests.h; sourceTree = "<group>"; };
+		C80B6838166D1E850004B8B6 /* OGAtomicSerializedArrayTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OGAtomicSerializedArrayTests.m; sourceTree = "<group>"; };
+		C881016F166D207900888B97 /* Pods.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = file; name = Pods.xcconfig; path = ../Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		C8810172166D20CC00888B97 /* OGAtomicSerializedArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OGAtomicSerializedArray.h; path = ../../OGAtomicSerializedArray.h; sourceTree = "<group>"; };
+		C8810173166D20CC00888B97 /* OGAtomicSerializedArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OGAtomicSerializedArray.m; path = ../../OGAtomicSerializedArray.m; sourceTree = "<group>"; };
 		C8F03B71166D1906009174CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C8F03B73166D1906009174CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C8F03B75166D1906009174CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -51,7 +59,11 @@
 		C80B681F166D1D320004B8B6 /* OGAtomicSerializedArrayTests */ = {
 			isa = PBXGroup;
 			children = (
+				C8810172166D20CC00888B97 /* OGAtomicSerializedArray.h */,
+				C8810173166D20CC00888B97 /* OGAtomicSerializedArray.m */,
 				C80B6820166D1D320004B8B6 /* Supporting Files */,
+				C80B6837166D1E850004B8B6 /* OGAtomicSerializedArrayTests.h */,
+				C80B6838166D1E850004B8B6 /* OGAtomicSerializedArrayTests.m */,
 			);
 			path = OGAtomicSerializedArrayTests;
 			sourceTree = "<group>";
@@ -59,6 +71,7 @@
 		C80B6820166D1D320004B8B6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C881016F166D207900888B97 /* Pods.xcconfig */,
 				C80B6821166D1D320004B8B6 /* OGAtomicSerializedArrayTests-Info.plist */,
 				C80B6822166D1D320004B8B6 /* InfoPlist.strings */,
 				C80B6825166D1D320004B8B6 /* main.m */,
@@ -154,6 +167,7 @@
 				C80B682C166D1D320004B8B6 /* Default.png in Resources */,
 				C80B682E166D1D320004B8B6 /* Default@2x.png in Resources */,
 				C80B6830166D1D320004B8B6 /* Default-568h@2x.png in Resources */,
+				C8810170166D207900888B97 /* Pods.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +179,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C80B6826166D1D320004B8B6 /* main.m in Sources */,
+				C80B6839166D1E850004B8B6 /* OGAtomicSerializedArrayTests.m in Sources */,
+				C8810174166D20CC00888B97 /* OGAtomicSerializedArray.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +200,7 @@
 /* Begin XCBuildConfiguration section */
 		C80B6831166D1D320004B8B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C881016F166D207900888B97 /* Pods.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -196,6 +213,7 @@
 		};
 		C80B6832166D1D320004B8B6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C881016F166D207900888B97 /* Pods.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -208,6 +226,7 @@
 		};
 		C8F03B89166D1906009174CD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C881016F166D207900888B97 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -234,11 +253,13 @@
 					"-all_load",
 				);
 				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
 		C8F03B8A166D1906009174CD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C881016F166D207900888B97 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -259,6 +280,7 @@
 					"-all_load",
 				);
 				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -273,6 +295,7 @@
 				C80B6832166D1D320004B8B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C8F03B67166D1906009174CD /* Build configuration list for PBXProject "OGAtomicSerializedArrayTests" */ = {
 			isa = XCConfigurationList;
