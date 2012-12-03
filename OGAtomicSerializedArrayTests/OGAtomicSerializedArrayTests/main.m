@@ -1,5 +1,5 @@
 //
-//  OGAppDelegate.h
+//  main.m
 //  OGAtomicSerializedArrayTests
 //
 //  Created by Art Gillespie on 12/3/12.
@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OGAppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (strong, nonatomic) UIWindow *window;
-
-@end
+int main(int argc, char *argv[]) {
+    @autoreleasepool {
+        return UIApplicationMain(argc, argv, nil, @"GHUnitIOSAppDelegate");
+    }
+}
