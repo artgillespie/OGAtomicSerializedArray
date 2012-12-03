@@ -49,4 +49,25 @@ NSString *testPath() {
     GHAssertEqualStrings(@"String One", [array objectAtIndex:0], @"Expected 'String One' in index [0] of fileArray");
 }
 
+- (void)testEquality {
+    OGAtomicSerializedArray *array = [OGAtomicSerializedArray atomicSerializedArrayWithPath:testPath()];
+    GHAssertNotNil(array, @"couldn't create atomic array for path: %@", testPath());
+    OGAtomicSerializedArray *array2 = [OGAtomicSerializedArray atomicSerializedArrayWithPath:testPath()];
+    GHAssertTrue(array == array2, @"Expected pointer equality for arrays at the same path");
+}
+
+- (void)testRemoveObject {
+    OGAtomicSerializedArray *array = [OGAtomicSerializedArray atomicSerializedArrayWithPath:testPath()];
+    GHAssertNotNil(array, @"couldn't create atomic array for path: %@", testPath());
+    [array addObjectAndSerialize:@"String One"];
+    [array addObjectAndSerialize:@"String Two"];
+    GHAssertEquals((NSUInteger)2, [array count], @"Expected array count of 2, got: %d", [array count]);
+    GHAssertEqualStrings(@"String One",[array objectAtIndex:0], @"Expected 'String One' in index [0]");
+    [array removeObjectAtIndexAndSerialize:0];
+    GHAssertEquals((NSUInteger)1, [array count], @"Expected array count of 1, got: %d", [array count]);
+    GHAssertEqualStrings(@"String Two",[array objectAtIndex:0], @"Expected 'String Two' in index [0]");
+    [array removeObjectAndSerialize:@"String Two"];
+    GHAssertEquals((NSUInteger)0, [array count], @"Expected array count of 1, got: %d", [array count]);
+}
+
 @end
