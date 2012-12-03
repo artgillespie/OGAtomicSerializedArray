@@ -11,7 +11,6 @@
 NSString *const OGAtomicSerializedArrayDeserializationException = @"OGAtomicSerializedArrayDeserializationException";
 NSString *const OGAtomicSerializedArraySerializationException = @"OGAtomicSerializedArraySerializationException";
 
-
 @implementation OGAtomicSerializedArray {
     NSString *_path;
     NSMutableArray *_mutableArray;
@@ -19,6 +18,7 @@ NSString *const OGAtomicSerializedArraySerializationException = @"OGAtomicSerial
 }
 
 static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
+static dispatch_queue_t OGGlobalSerializedArraysDictionaryAccessQueue = nil;
 
 + (NSMutableDictionary *)__globalDictionary {
     if (nil == OGGlobalSerializedArraysDictionary) {
@@ -33,28 +33,24 @@ static NSMutableDictionary *OGGlobalSerializedArraysDictionary = nil;
 + (OGAtomicSerializedArray *)atomicSerializedArrayWithPath:(NSString *)path {
     // on the off chance that more than one thread calls this with the same path
     // at the same time, serialize access to `OGAtomicSerializedArraysDictionary`
-#ifndef __clang_analyzer__
-    // The static analyzer doesn't understand that we'll never get here
-    // with a nil value for `OGGlobalSerializedArraysDictionary` and so flags
-    // this code as `Nil value used as mutex for @synchronized`
-    //
-    // #ifdef'ing the synchronization out for analyzer runs eliminates the warning.
-    // see http://clang-analyzer.llvm.org/faq.html#exclude_code
-    @synchronized ([OGAtomicSerializedArray __globalDictionary]) {
-#endif
+    if (nil == OGGlobalSerializedArraysDictionaryAccessQueue) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            OGGlobalSerializedArraysDictionaryAccessQueue = dispatch_queue_create("com.origami.OGAtomicSerializedArray.GlobalAccessQueue", DISPATCH_QUEUE_SERIAL);
+        });
+    }
+    __block OGAtomicSerializedArray *atomicArray = nil;
+    dispatch_sync(OGGlobalSerializedArraysDictionaryAccessQueue, ^{
         // we only keep one in-memory representation for each path, so if
         // we already have one in the global dictionary, return that.
-        OGAtomicSerializedArray *atomicArray = [OGGlobalSerializedArraysDictionary objectForKey:path];
-        if (nil != atomicArray) {
-            return atomicArray;
+        atomicArray = [OGGlobalSerializedArraysDictionary objectForKey:path];
+        if (nil == atomicArray) {
+            // the atomic array for this path isn't in memory ...
+            atomicArray = [[OGAtomicSerializedArray alloc] initWithPath:path];
+            [[OGAtomicSerializedArray __globalDictionary] setObject:atomicArray forKey:path];
         }
-        // the atomic array for this path isn't in memory ...
-        atomicArray = [[OGAtomicSerializedArray alloc] initWithPath:path];
-        [[OGAtomicSerializedArray __globalDictionary] setObject:atomicArray forKey:path];
-        return atomicArray;
-#ifndef __clang_analyzer__
-    } // end @synchronized
-#endif
+    });
+    return atomicArray;
 }
 
 + (BOOL)purgeAtomicSerializedArrayAtPath:(NSString *)path purgeFromDisk:(BOOL)purgeFromDisk {
